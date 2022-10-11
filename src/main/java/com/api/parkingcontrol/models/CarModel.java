@@ -1,8 +1,13 @@
 package com.api.parkingcontrol.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
@@ -23,11 +28,11 @@ public class CarModel implements Serializable {
     @Column(nullable = false, length = 70)
     private String model;
 
-    public LocalDateTime getRegistrationDate() {
+    public LocalDate getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(LocalDateTime registrationDate) {
+    public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
     }
 
@@ -35,7 +40,8 @@ public class CarModel implements Serializable {
     private String color;
 
     @Column(nullable = false)
-    private LocalDateTime registrationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate registrationDate;
 
     public UUID getId() {
         return id;
