@@ -3,8 +3,6 @@ package com.api.parkingcontrol.controllers;
 import com.api.parkingcontrol.dtos.CarDto;
 import com.api.parkingcontrol.models.CarModel;
 import com.api.parkingcontrol.services.CarService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +37,7 @@ public class CarController {
         carModel.setRegistrationDate(LocalDate.now(ZoneId.of("UTC")));
         carService.save(carModel);
 
-        var json = convertToJSON(carModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(json);
+        return ResponseEntity.status(HttpStatus.CREATED).body(carModel);
     }
 
     @GetMapping
@@ -81,17 +78,5 @@ public class CarController {
         carModel.setId(carModelOptional.get().getId());
         carModel.setRegistrationDate(carModelOptional.get().getRegistrationDate());
         return ResponseEntity.status(HttpStatus.OK).body(carService.save(carModel));
-    }
-
-    public String convertToJSON(CarModel object){
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
-        try {
-            String json = mapper.writeValueAsString(object);
-            return json;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "error";
-        }
     }
 }
