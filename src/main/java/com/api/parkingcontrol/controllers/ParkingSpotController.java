@@ -33,7 +33,8 @@ public class ParkingSpotController {
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid @NotNull ParkingSpotDto parkingSpotDto) {
         var parkingSpotModel = new ParkingSpotModel();
-        BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel);
+        if (parkingSpotService.existsByApartmentAndBlock(parkingSpotDto.getApartment(), parkingSpotDto.getBlock()))
+            return ResponseEntity.status(HttpStatus.FOUND).body("A parking lot with these apartment and block already exists.");        BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel);
         parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingSpotService.save(parkingSpotModel));
     }
